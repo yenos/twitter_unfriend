@@ -1,0 +1,23 @@
+import tweepy
+import time
+
+TWITTER_SCREENAME = "{YOUR ACCOUNT SCREENAME}"
+TWITTER_CONSUMER_API = ""
+TWITTER_CONSUMER_SECRET = ""
+TWITTER_TOKEN_ACCESS = ""
+TWITTER_TOKEN_SECRET = ""
+
+auth = tweepy.OAuthHandler(TWITTER_CONSUMER_API, TWITTER_CONSUMER_SECRET)
+auth.set_access_token(TWITTER_TOKEN_ACCESS, TWITTER_TOKEN_SECRET)
+
+_twitter_api = tweepy.API(auth)
+
+for page in tweepy.Cursor(_twitter_api.followers_ids, screen_name=TWITTER_SCREENAME).pages():
+    for id in page:
+        print("Block {}".format(id))
+        _twitter_api.create_block(id)
+        time.sleep(1)
+        print("Unlock {}\n".format(id))
+        _twitter_api.destroy_block(id)
+        time.sleep(1)
+
